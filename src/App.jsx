@@ -4,6 +4,7 @@ import Layout from './components/Layout.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import Goals from './pages/Goals.jsx';
 import Login from './pages/Login.jsx';
+import UpdatePassword from './pages/UpdatePassword.jsx';
 import Reports from './pages/Reports.jsx';
 import Settings from './pages/Settings.jsx';
 import Transactions from './pages/Transactions.jsx';
@@ -42,6 +43,7 @@ export default function App() {
         <Route path="reports" element={<Reports />} />
         <Route path="settings" element={<Settings />} />
       </Route>
+      <Route path="/update-password" element={<ProtectedRoute><UpdatePassword /></ProtectedRoute>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
