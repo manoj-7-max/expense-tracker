@@ -88,6 +88,23 @@ export default function Layout() {
         </div>
       </aside>
 
+      {/* Mobile Top Header */}
+      <header className="sticky top-0 z-30 flex items-center gap-3 glass-panel border-b border-white/5 px-4 py-3 lg:hidden">
+        <div className="relative">
+          <img src="/logo.jpg" alt="Logo" className="w-10 h-10 object-contain drop-shadow-[0_0_10px_rgba(0,240,255,0.6)] rounded-full" onError={(e) => {
+            e.target.style.display = 'none';
+            e.target.nextSibling.style.display = 'grid';
+          }} />
+          <div className="hidden h-10 w-10 place-items-center rounded-xl bg-neon-cyan/10 border border-neon-cyan/30 text-neon-cyan shadow-glow" style={{ display: 'none' }}>
+            <WalletCards size={20} />
+          </div>
+        </div>
+        <div>
+          <h1 className="text-lg font-display font-bold tracking-wide neon-text">KAASU</h1>
+          <p className="text-[10px] font-semibold tracking-[0.2em] text-neon-mint leading-none">KANAKKU</p>
+        </div>
+      </header>
+
       {/* Main Content Area */}
       <main className="relative z-10 pb-24 lg:ml-72 lg:pb-0 min-h-screen flex flex-col">
         <AnimatePresence mode="wait">
