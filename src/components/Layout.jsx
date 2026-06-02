@@ -29,9 +29,13 @@ export default function Layout() {
         <div className="flex items-center justify-center py-4">
           <div className="relative w-full flex justify-center">
             {/* Logo Image */}
-            <img src="/logo.jpg" alt="Kaasu Kanakku" className="h-32 w-auto object-contain drop-shadow-[0_0_15px_rgba(0,240,255,0.4)] scale-110" onError={(e) => {
-              e.target.style.display = 'none';
-              e.target.nextSibling.style.display = 'grid';
+            <img src="/logo.png" alt="Kaasu Kanakku" className="h-20 sm:h-24 w-auto object-contain drop-shadow-[0_0_15px_rgba(0,240,255,0.4)]" onError={(e) => {
+              if (e.target.src.endsWith('.png')) {
+                e.target.src = '/logo.jpg';
+              } else {
+                e.target.style.display = 'none';
+                e.target.nextSibling.style.display = 'grid';
+              }
             }} />
             {/* Fallback Icon if logo.jpg doesn't exist */}
             <div className="hidden h-16 w-16 place-items-center rounded-xl bg-neon-cyan/10 border border-neon-cyan/30 text-neon-cyan shadow-glow" style={{ display: 'none' }}>
@@ -86,10 +90,15 @@ export default function Layout() {
 
       {/* Mobile Top Header */}
       <header className="sticky top-0 z-30 flex items-center justify-center glass-panel border-b border-white/5 px-4 py-3 lg:hidden">
-        <div className="relative">
-          <img src="/logo.jpg" alt="Kaasu Kanakku" className="h-20 w-auto object-contain drop-shadow-[0_0_10px_rgba(0,240,255,0.4)] scale-110" onError={(e) => {
-            e.target.style.display = 'none';
-            e.target.nextSibling.style.display = 'grid';
+        <div className="relative w-full flex justify-center">
+          <img src="/logo.png" alt="Kaasu Kanakku" className="h-12 sm:h-14 w-auto object-contain drop-shadow-[0_0_10px_rgba(0,240,255,0.4)]" onError={(e) => {
+            // Try fallback to .jpg if .png fails
+            if (e.target.src.endsWith('.png')) {
+              e.target.src = '/logo.jpg';
+            } else {
+              e.target.style.display = 'none';
+              e.target.nextSibling.style.display = 'grid';
+            }
           }} />
           <div className="hidden h-12 w-12 place-items-center rounded-xl bg-neon-cyan/10 border border-neon-cyan/30 text-neon-cyan shadow-glow" style={{ display: 'none' }}>
             <WalletCards size={24} />
