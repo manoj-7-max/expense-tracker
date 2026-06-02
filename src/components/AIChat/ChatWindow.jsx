@@ -12,7 +12,7 @@ export default function ChatWindow({ onClose }) {
   const messagesEndRef = useRef(null);
   
   const token = session?.access_token;
-  const API_URL = 'http://localhost:3001/api/chat'; // In production this would be relative or configurable
+  const API_URL = '/api/chat'; // Now works in production and can be proxied locally
 
   useEffect(() => {
     // Fetch chat history
