@@ -89,7 +89,7 @@ export default function Layout() {
       </aside>
 
       {/* Mobile Top Header */}
-      <header className="sticky top-0 z-30 flex items-center justify-center glass-panel border-b border-white/5 px-4 py-4 lg:hidden">
+      <header className="flex items-center justify-center glass-panel border-b border-white/5 px-4 py-4 lg:hidden">
         <div className="relative w-full flex justify-center items-center">
           <img src="/logo.png" alt="Kaasu Kanakku" className="w-[90%] sm:w-[80%] h-auto max-h-32 sm:max-h-40 object-contain drop-shadow-[0_0_15px_rgba(0,240,255,0.6)]" onError={(e) => {
             // Try fallback to .jpg if .png fails
