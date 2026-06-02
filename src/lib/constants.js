@@ -11,13 +11,13 @@ export const expenseCategories = [
 ];
 
 export const categoryColors = {
-  Food: '#14b8a6',
-  Travel: '#0ea5e9',
-  Shopping: '#f97316',
-  Bills: '#6366f1',
-  EMI: '#ef4444',
-  Fuel: '#84cc16',
-  Medical: '#ec4899',
-  Entertainment: '#a855f7',
-  Others: '#64748b',
+  Food: '#00F0FF',      // Neon Cyan
+  Travel: '#00FFCC',    // Neon Mint
+  Shopping: '#FF007F',  // Neon Pink
+  Bills: '#8A2BE2',     // Neon Purple
+  EMI: '#FF3366',       // Neon Red
+  Fuel: '#0070F3',      // Neon Blue
+  Medical: '#FFD700',   // Neon Gold
+  Entertainment: '#FF8C00', // Neon Orange
+  Others: '#475569',    // Slate 600
 };

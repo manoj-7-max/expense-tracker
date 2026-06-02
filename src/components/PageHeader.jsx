@@ -1,11 +1,21 @@
+import { motion } from 'framer-motion';
+
 export default function PageHeader({ title, subtitle, action }) {
   return (
-    <header className="flex flex-col gap-4 border-b border-slate-200 bg-white px-4 py-5 dark:border-slate-800 dark:bg-slate-900 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+    <motion.header 
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="flex flex-col gap-4 px-4 py-6 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8 mt-4"
+    >
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-slate-950 dark:text-white">{title}</h1>
-        {subtitle ? <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{subtitle}</p> : null}
+        <h1 className="text-3xl font-display font-bold tracking-tight text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">{title}</h1>
+        {subtitle && <p className="mt-1 text-sm text-neon-cyan/80 font-medium tracking-wide">{subtitle}</p>}
       </div>
-      {action}
-    </header>
+      {action && (
+        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+          {action}
+        </motion.div>
+      )}
+    </motion.header>
   );
 }

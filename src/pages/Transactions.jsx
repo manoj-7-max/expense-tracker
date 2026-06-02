@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Plus, Search } from 'lucide-react';
+import { motion } from 'framer-motion';
 import Modal from '../components/Modal.jsx';
 import PageHeader from '../components/PageHeader.jsx';
 import TransactionForm from '../components/TransactionForm.jsx';
@@ -42,18 +43,22 @@ export default function Transactions() {
         action={
           <button className="btn-primary" type="button" onClick={() => setOpen(true)}>
             <Plus size={18} />
-            Add
+            Add Record
           </button>
         }
       />
-      <div className="space-y-5 p-4 sm:p-6 lg:p-8">
-        <section className="card grid gap-3 p-4 md:grid-cols-[1.2fr_0.8fr_0.8fr_0.8fr]">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="space-y-6 p-4 sm:p-6 lg:p-8"
+      >
+        <section className="card grid gap-4 p-6 md:grid-cols-[1.2fr_0.8fr_0.8fr_0.8fr] border-t border-white/10">
           <label className="relative block">
-            <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={17} />
-            <input className="input pl-10" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search notes or source" />
+            <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-neon-cyan" size={18} />
+            <input className="input pl-12" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search notes..." />
           </label>
           <select className="input" value={category} onChange={(e) => setCategory(e.target.value)}>
-            <option>All</option>
+            <option>All Categories</option>
             <option>Income</option>
             {expenseCategories.map((item) => (
               <option key={item}>{item}</option>
@@ -63,7 +68,7 @@ export default function Transactions() {
           <input className="input" type="date" value={to} onChange={(e) => setTo(e.target.value)} />
         </section>
 
-        <section className="card p-4">
+        <section className="card p-6 border-t border-white/10">
           <TransactionList
             transactions={filtered}
             onEdit={(item) => {
@@ -73,7 +78,7 @@ export default function Transactions() {
             onDelete={deleteTransaction}
           />
         </section>
-      </div>
+      </motion.div>
 
       <Modal title={editing ? 'Edit Transaction' : 'Add Transaction'} open={open} onClose={close}>
         <TransactionForm

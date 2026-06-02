@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Bot, Send, User, X, Loader2, AlertCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../context/AuthContext.jsx';
 import ChatSuggestions from './ChatSuggestions.jsx';
 
@@ -12,10 +13,9 @@ export default function ChatWindow({ onClose }) {
   const messagesEndRef = useRef(null);
   
   const token = session?.access_token;
-  const API_URL = '/api/chat'; // Now works in production and can be proxied locally
+  const API_URL = '/api/chat';
 
   useEffect(() => {
-    // Fetch chat history
     const fetchHistory = async () => {
       try {
         const res = await fetch(`${API_URL}/history`, {
@@ -34,7 +34,6 @@ export default function ChatWindow({ onClose }) {
   }, [token]);
 
   useEffect(() => {
-    // Scroll to bottom
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
@@ -66,74 +65,82 @@ export default function ChatWindow({ onClose }) {
       setMessages(prev => [...prev, { role: 'assistant', content: data.response, id: Date.now() + 1 }]);
     } catch (err) {
       setError(err.message);
-      // Remove the optimistic user message if we want, or just show error
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="fixed bottom-20 right-6 z-50 flex h-[500px] w-[350px] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl dark:border-slate-800 dark:bg-slate-900 sm:w-[400px]">
+    <motion.div 
+      initial={{ opacity: 0, scale: 0.95, y: 20 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.95, y: 20 }}
+      className="fixed bottom-24 right-6 z-50 flex h-[500px] w-[350px] flex-col overflow-hidden rounded-2xl border border-neon-cyan/20 bg-navy-900/95 backdrop-blur-md shadow-[0_0_30px_rgba(0,240,255,0.15)] sm:w-[400px]"
+    >
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-slate-100 bg-teal-600 px-4 py-3 text-white dark:border-slate-800 dark:bg-teal-900">
-        <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20">
-            <Bot size={18} />
+      <div className="flex items-center justify-between border-b border-white/10 bg-navy-950/50 px-4 py-4 text-white">
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-neon-cyan/20 text-neon-cyan shadow-[0_0_10px_rgba(0,240,255,0.3)]">
+            <Bot size={20} />
           </div>
           <div>
-            <h3 className="font-semibold leading-tight">Kaasu Kanakku AI</h3>
-            <p className="text-[10px] text-teal-100">Your Financial Advisor</p>
+            <h3 className="font-display font-bold leading-tight tracking-wide text-white">AI Advisor</h3>
+            <p className="text-[11px] text-neon-cyan/80 font-medium tracking-wider uppercase mt-0.5">Kaasu Kanakku</p>
           </div>
         </div>
-        <button onClick={onClose} className="rounded-full p-1.5 transition hover:bg-white/20">
+        <button onClick={onClose} className="rounded-full p-2 transition hover:bg-white/10 hover:text-rose-400">
           <X size={18} />
         </button>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50 dark:bg-slate-900/50">
+      <div className="flex-1 overflow-y-auto p-4 space-y-5 bg-transparent">
         {messages.length === 0 && !loading && (
-          <div className="text-center mt-10">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-teal-100 text-teal-600 dark:bg-teal-900/30 dark:text-teal-400">
-              <Bot size={24} />
+          <div className="text-center mt-8">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-neon-cyan/10 text-neon-cyan shadow-glow">
+              <Bot size={28} />
             </div>
-            <h4 className="mt-4 font-medium text-slate-700 dark:text-slate-200">Hi, I'm Kaasu Kanakku AI!</h4>
-            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-              I can analyze your spending and give you money-saving advice. How can I help today?
+            <h4 className="mt-5 font-display font-bold text-white text-lg tracking-wide">Hi, I'm Kaasu Kanakku AI!</h4>
+            <p className="mt-2 text-sm text-slate-400 max-w-[280px] mx-auto leading-relaxed">
+              I analyze your spending to give you personalized money-saving advice.
             </p>
             <ChatSuggestions onSelect={handleSend} />
           </div>
         )}
         
         {messages.map((msg, i) => (
-          <div key={msg.id || i} className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-            <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${msg.role === 'user' ? 'bg-slate-200 text-slate-600 dark:bg-slate-800 dark:text-slate-300' : 'bg-teal-100 text-teal-700 dark:bg-teal-900/50 dark:text-teal-300'}`}>
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            key={msg.id || i} 
+            className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}
+          >
+            <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${msg.role === 'user' ? 'bg-navy-700 text-slate-300' : 'bg-neon-cyan/20 text-neon-cyan shadow-glow-sm'}`}>
               {msg.role === 'user' ? <User size={16} /> : <Bot size={16} />}
             </div>
-            <div className={`max-w-[75%] rounded-2xl px-4 py-2 text-sm ${
+            <div className={`max-w-[75%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
               msg.role === 'user' 
-                ? 'bg-teal-600 text-white rounded-tr-none' 
-                : 'bg-white text-slate-700 border border-slate-100 shadow-sm dark:border-slate-800 dark:bg-slate-800 dark:text-slate-200 rounded-tl-none'
+                ? 'bg-neon-cyan/20 text-white rounded-tr-none border border-neon-cyan/30' 
+                : 'bg-navy-800 text-slate-200 border border-white/5 shadow-sm rounded-tl-none'
             }`}>
-              {/* Note: In a real app we'd use react-markdown to render the response. We keep it simple here. */}
               <div className="whitespace-pre-wrap">{msg.content}</div>
             </div>
-          </div>
+          </motion.div>
         ))}
         
         {loading && (
           <div className="flex gap-3">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-teal-100 text-teal-700 dark:bg-teal-900/50 dark:text-teal-300">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-neon-cyan/20 text-neon-cyan shadow-glow-sm">
               <Bot size={16} />
             </div>
-            <div className="flex items-center rounded-2xl rounded-tl-none border border-slate-100 bg-white px-4 py-3 shadow-sm dark:border-slate-800 dark:bg-slate-800">
-              <Loader2 size={16} className="animate-spin text-teal-600 dark:text-teal-400" />
+            <div className="flex items-center rounded-2xl rounded-tl-none border border-white/5 bg-navy-800 px-4 py-3 shadow-sm">
+              <Loader2 size={16} className="animate-spin text-neon-cyan" />
             </div>
           </div>
         )}
         
         {error && (
-          <div className="flex items-center gap-2 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
+          <div className="flex items-center gap-2 rounded-lg bg-rose-500/10 border border-rose-500/30 px-3 py-2 text-sm text-rose-400">
             <AlertCircle size={16} />
             <p>{error}</p>
           </div>
@@ -143,10 +150,10 @@ export default function ChatWindow({ onClose }) {
       </div>
 
       {/* Input */}
-      <div className="border-t border-slate-100 bg-white p-3 dark:border-slate-800 dark:bg-slate-900">
+      <div className="border-t border-white/10 bg-navy-950/50 p-4">
         <form 
           onSubmit={(e) => { e.preventDefault(); handleSend(input); }}
-          className="flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 pl-4 pr-1.5 py-1.5 focus-within:border-teal-500 focus-within:ring-1 focus-within:ring-teal-500 dark:border-slate-700 dark:bg-slate-950"
+          className="flex items-center gap-2 rounded-full border border-white/10 bg-navy-900/50 pl-4 pr-1.5 py-1.5 focus-within:border-neon-cyan/50 focus-within:shadow-[0_0_15px_rgba(0,240,255,0.1)] transition-all"
         >
           <input
             type="text"
@@ -154,17 +161,17 @@ export default function ChatWindow({ onClose }) {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             disabled={loading}
-            className="flex-1 bg-transparent text-sm outline-none placeholder:text-slate-400 dark:text-slate-200"
+            className="flex-1 bg-transparent text-sm text-white outline-none placeholder:text-slate-500"
           />
           <button
             type="submit"
             disabled={!input.trim() || loading}
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-teal-600 text-white transition hover:bg-teal-700 disabled:opacity-50 dark:bg-teal-700 dark:hover:bg-teal-600"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-neon-cyan text-navy-950 transition hover:bg-white hover:shadow-glow disabled:opacity-50 disabled:hover:bg-neon-cyan"
           >
             <Send size={14} className="ml-0.5" />
           </button>
         </form>
       </div>
-    </div>
+    </motion.div>
   );
 }

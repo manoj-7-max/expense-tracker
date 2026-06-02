@@ -1,42 +1,70 @@
 import { format, parseISO } from 'date-fns';
 import { Edit2, Trash2 } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { money } from '../lib/finance.js';
+import { categoryColors } from '../lib/constants.js';
 
 export default function TransactionList({ transactions, onEdit, onDelete, compact = false }) {
   if (!transactions.length) {
-    return <p className="rounded-lg border border-dashed border-slate-300 p-6 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">No transactions yet.</p>;
+    return <p className="rounded-2xl border border-dashed border-white/20 p-8 text-center text-sm text-slate-400 glass-panel">No transactions yet.</p>;
   }
 
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.05 }
+    }
+  };
+  
+  const itemAnim = {
+    hidden: { opacity: 0, x: -20 },
+    show: { opacity: 1, x: 0 }
+  };
+
   return (
-    <div className="divide-y divide-slate-100 dark:divide-slate-800">
-      {transactions.map((item) => (
-        <article key={item.id} className="flex items-center gap-3 py-3">
-          <div className={`grid h-11 w-11 shrink-0 place-items-center rounded-lg text-sm font-bold ${item.type === 'income' ? 'bg-teal-50 text-teal-700 dark:bg-teal-950 dark:text-teal-300' : 'bg-rose-50 text-rose-700 dark:bg-rose-950 dark:text-rose-300'}`}>
-            {item.type === 'income' ? '+' : '-'}
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-semibold">{item.category || item.type}</p>
-            <p className="truncate text-xs text-slate-500 dark:text-slate-400">
-              {format(parseISO(item.date), 'dd MMM yyyy')}
-              {item.note ? ` · ${item.note}` : ''}
-            </p>
-          </div>
-          <p className={`text-sm font-bold ${item.type === 'income' ? 'text-teal-700 dark:text-teal-300' : 'text-rose-700 dark:text-rose-300'}`}>
-            {item.type === 'income' ? '+' : '-'}
-            {money(item.amount)}
-          </p>
-          {!compact ? (
-            <div className="flex gap-2">
-              <button type="button" className="icon-btn" onClick={() => onEdit(item)} aria-label="Edit transaction">
-                <Edit2 size={16} />
-              </button>
-              <button type="button" className="icon-btn" onClick={() => onDelete(item.id)} aria-label="Delete transaction">
-                <Trash2 size={16} />
-              </button>
+    <motion.div variants={container} initial="hidden" animate="show" className="space-y-3">
+      {transactions.map((item) => {
+        const isIncome = item.type === 'income';
+        const color = isIncome ? '#00FFCC' : (categoryColors[item.category] || '#FF3366');
+        
+        return (
+          <motion.article 
+            variants={itemAnim}
+            whileHover={{ scale: 1.01, x: 5 }}
+            key={item.id} 
+            className="group flex items-center gap-4 py-3 px-4 rounded-xl transition-all duration-300 hover:bg-white/5 border border-transparent hover:border-white/10"
+          >
+            <div 
+              className="grid h-12 w-12 shrink-0 place-items-center rounded-xl text-lg font-bold shadow-glow-sm"
+              style={{ backgroundColor: `${color}15`, color: color, borderColor: `${color}30`, borderWidth: 1 }}
+            >
+              {isIncome ? '+' : '-'}
             </div>
-          ) : null}
-        </article>
-      ))}
-    </div>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-base font-semibold text-slate-200">{item.category || item.type}</p>
+              <p className="truncate text-xs font-medium text-slate-500 mt-0.5">
+                {format(parseISO(item.date), 'dd MMM yyyy')}
+                {item.note ? <span className="text-slate-400"> · {item.note}</span> : ''}
+              </p>
+            </div>
+            <p className="text-base font-display font-bold tracking-wide" style={{ color: color, textShadow: `0 0 10px ${color}40` }}>
+              {isIncome ? '+' : '-'}
+              {money(item.amount)}
+            </p>
+            {!compact ? (
+              <div className="flex gap-2 ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button type="button" className="icon-btn hover:text-neon-cyan hover:border-neon-cyan/50" onClick={() => onEdit(item)} aria-label="Edit transaction">
+                  <Edit2 size={16} />
+                </button>
+                <button type="button" className="icon-btn hover:text-rose-400 hover:border-rose-400/50" onClick={() => onDelete(item.id)} aria-label="Delete transaction">
+                  <Trash2 size={16} />
+                </button>
+              </div>
+            ) : null}
+          </motion.article>
+        );
+      })}
+    </motion.div>
   );
 }

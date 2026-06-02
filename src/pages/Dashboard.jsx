@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { CreditCard, Plus, TrendingDown, TrendingUp, Wallet } from 'lucide-react';
+import { motion } from 'framer-motion';
 import BudgetCard from '../components/BudgetCard.jsx';
 import { CategoryChart, IncomeExpenseChart } from '../components/Charts.jsx';
 import Modal from '../components/Modal.jsx';
@@ -9,6 +10,19 @@ import TransactionForm from '../components/TransactionForm.jsx';
 import TransactionList from '../components/TransactionList.jsx';
 import { useFinance } from '../context/FinanceContext.jsx';
 import { getSummary, money } from '../lib/finance.js';
+
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 }
+  }
+};
+
+const item = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+};
 
 export default function Dashboard() {
   const { transactions, budget, saveBudget, saveTransaction } = useFinance();
@@ -31,21 +45,26 @@ export default function Dashboard() {
         action={
           <button className="btn-primary" type="button" onClick={() => setTransactionModal(true)}>
             <Plus size={18} />
-            Add
+            Add Record
           </button>
         }
       />
-      <div className="space-y-6 p-4 sm:p-6 lg:p-8">
-        <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <StatCard title="Total Balance" value={money(summary.balance)} icon={Wallet} tone="teal" />
-          <StatCard title="Total Income" value={money(summary.income)} icon={TrendingUp} tone="sky" />
+      <motion.div 
+        variants={container}
+        initial="hidden"
+        animate="show"
+        className="space-y-6 p-4 sm:p-6 lg:p-8"
+      >
+        <motion.section variants={item} className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <StatCard title="Total Balance" value={money(summary.balance)} icon={Wallet} tone="cyan" />
+          <StatCard title="Total Income" value={money(summary.income)} icon={TrendingUp} tone="mint" />
           <StatCard title="Total Expenses" value={money(summary.expenses)} icon={TrendingDown} tone="rose" />
           <StatCard title="Monthly Savings" value={money(summary.savings)} icon={CreditCard} tone="amber" />
-        </section>
+        </motion.section>
 
-        <div className="grid gap-6 xl:grid-cols-[1.3fr_0.7fr]">
-          <section className="card p-4">
-            <h2 className="mb-4 text-lg font-bold">Income vs Expense</h2>
+        <motion.div variants={item} className="grid gap-6 xl:grid-cols-[1.3fr_0.7fr]">
+          <section className="card p-6 border-t border-white/10">
+            <h2 className="mb-6 text-xl font-display font-bold text-white tracking-wide">Income vs Expense</h2>
             <IncomeExpenseChart transactions={transactions} />
           </section>
           <BudgetCard
@@ -56,19 +75,19 @@ export default function Dashboard() {
               setBudgetModal(true);
             }}
           />
-        </div>
+        </motion.div>
 
-        <div className="grid gap-6 xl:grid-cols-[0.8fr_1.2fr]">
-          <section className="card p-4">
-            <h2 className="mb-4 text-lg font-bold">Expense Categories</h2>
+        <motion.div variants={item} className="grid gap-6 xl:grid-cols-[0.8fr_1.2fr]">
+          <section className="card p-6 border-t border-white/10">
+            <h2 className="mb-6 text-xl font-display font-bold text-white tracking-wide">Expense Categories</h2>
             <CategoryChart transactions={transactions} />
           </section>
-          <section className="card p-4">
-            <h2 className="mb-2 text-lg font-bold">Recent Transactions</h2>
+          <section className="card p-6 border-t border-white/10">
+            <h2 className="mb-4 text-xl font-display font-bold text-white tracking-wide">Recent Transactions</h2>
             <TransactionList transactions={transactions.slice(0, 6)} compact />
           </section>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       <Modal title="Add Transaction" open={transactionModal} onClose={() => setTransactionModal(false)}>
         <TransactionForm
@@ -81,13 +100,16 @@ export default function Dashboard() {
       </Modal>
 
       <Modal title="Monthly Budget" open={budgetModal} onClose={() => setBudgetModal(false)}>
-        <form className="space-y-4" onSubmit={saveBudgetValue}>
-          <label className="block text-sm font-semibold">
-            Monthly limit
-            <input className="input mt-2" min="0" step="0.01" type="number" value={budgetValue} onChange={(e) => setBudgetValue(e.target.value)} />
+        <form className="space-y-6" onSubmit={saveBudgetValue}>
+          <label className="block text-sm font-semibold text-slate-300">
+            Monthly Limit
+            <div className="relative mt-2">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">₹</span>
+              <input className="input pl-8" min="0" step="0.01" type="number" value={budgetValue} onChange={(e) => setBudgetValue(e.target.value)} />
+            </div>
           </label>
           <button className="btn-primary w-full" type="submit">
-            Save Budget
+            Save Budget Limits
           </button>
         </form>
       </Modal>

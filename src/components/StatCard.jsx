@@ -1,22 +1,30 @@
-export default function StatCard({ title, value, icon: Icon, tone = 'teal' }) {
+import { motion } from 'framer-motion';
+
+export default function StatCard({ title, value, icon: Icon, tone = 'cyan' }) {
   const tones = {
-    teal: 'bg-teal-50 text-teal-700 dark:bg-teal-950 dark:text-teal-300',
-    sky: 'bg-sky-50 text-sky-700 dark:bg-sky-950 dark:text-sky-300',
-    rose: 'bg-rose-50 text-rose-700 dark:bg-rose-950 dark:text-rose-300',
-    amber: 'bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300',
+    cyan: 'bg-neon-cyan/10 text-neon-cyan border border-neon-cyan/30 shadow-[0_0_10px_rgba(0,240,255,0.2)]',
+    mint: 'bg-neon-mint/10 text-neon-mint border border-neon-mint/30 shadow-[0_0_10px_rgba(0,255,204,0.2)]',
+    rose: 'bg-neon-red/10 text-neon-red border border-neon-red/30 shadow-[0_0_10px_rgba(255,51,102,0.2)]',
+    amber: 'bg-amber-400/10 text-amber-400 border border-amber-400/30 shadow-[0_0_10px_rgba(251,191,36,0.2)]',
   };
 
   return (
-    <section className="card p-4">
+    <motion.section 
+      whileHover={{ y: -5, scale: 1.02 }}
+      className="card p-5 group cursor-pointer border-t border-white/10"
+    >
       <div className="flex items-center justify-between gap-3">
-        <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{title}</p>
+        <p className="text-sm font-medium text-slate-400 group-hover:text-slate-300 transition-colors">{title}</p>
         {Icon ? (
-          <div className={`grid h-10 w-10 place-items-center rounded-lg ${tones[tone]}`}>
-            <Icon size={20} />
+          <div className={`grid h-12 w-12 place-items-center rounded-xl transition-all duration-300 group-hover:shadow-glow ${tones[tone]}`}>
+            <Icon size={22} className="drop-shadow-[0_0_8px_currentColor]" />
           </div>
         ) : null}
       </div>
-      <p className="mt-4 text-2xl font-bold tracking-tight">{value}</p>
-    </section>
+      <p className="mt-4 text-3xl font-display font-bold tracking-tight text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]">{value}</p>
+      
+      {/* Decorative Glow Line */}
+      <div className={`absolute bottom-0 left-0 h-1 w-0 transition-all duration-500 group-hover:w-full ${tones[tone].split(' ')[1].replace('text-', 'bg-')}`}></div>
+    </motion.section>
   );
 }
