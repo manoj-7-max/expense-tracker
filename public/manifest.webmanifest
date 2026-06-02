@@ -1,17 +1,17 @@
 {
-  "name": "Personal Expense Tracker",
-  "short_name": "Money",
+  "name": "Kaasu Kanakku",
+  "short_name": "Kaasu",
   "description": "Track expenses, income, savings goals, budgets, and reports.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f8fafc",
-  "theme_color": "#0f766e",
+  "background_color": "#0a1220",
+  "theme_color": "#0a1220",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/icons/icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
+      "src": "/logo.jpg",
+      "sizes": "192x192 512x512",
+      "type": "image/jpeg",
       "purpose": "any maskable"
     }
   ],
