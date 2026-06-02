@@ -29,11 +29,11 @@ export default function Layout() {
         <div className="flex items-center gap-4">
           <div className="relative">
             {/* Logo Image */}
-            <img src="/logo.png" alt="Logo" className="w-12 h-12 object-contain drop-shadow-[0_0_10px_rgba(0,240,255,0.6)]" onError={(e) => {
+            <img src="/logo.jpg" alt="Logo" className="w-12 h-12 object-contain drop-shadow-[0_0_10px_rgba(0,240,255,0.6)] rounded-full" onError={(e) => {
               e.target.style.display = 'none';
               e.target.nextSibling.style.display = 'grid';
             }} />
-            {/* Fallback Icon if logo.png doesn't exist */}
+            {/* Fallback Icon if logo.jpg doesn't exist */}
             <div className="hidden h-12 w-12 place-items-center rounded-xl bg-neon-cyan/10 border border-neon-cyan/30 text-neon-cyan shadow-glow" style={{ display: 'none' }}>
               <WalletCards size={24} />
             </div>
