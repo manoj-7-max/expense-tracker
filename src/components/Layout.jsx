@@ -1,6 +1,7 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { BarChart3, Home, LogOut, PiggyBank, ReceiptText, Settings, WalletCards } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.jsx';
+import ChatWidget from './AIChat/ChatWidget.jsx';
 
 const navItems = [
   { to: '/', label: 'Home', icon: Home },
@@ -73,6 +74,8 @@ export default function Layout() {
           </NavLink>
         ))}
       </nav>
+
+      <ChatWidget />
     </div>
   );
 }
