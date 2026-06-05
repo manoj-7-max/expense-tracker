@@ -39,8 +39,11 @@ export default function App() {
       >
         <Route index element={<Dashboard />} />
         <Route path="transactions" element={<Transactions />} />
+        <Route path="budgets" element={<div className="p-8 text-center text-slate-400">Budgets (Coming Soon)</div>} />
         <Route path="goals" element={<Goals />} />
         <Route path="reports" element={<Reports />} />
+        <Route path="accounts" element={<div className="p-8 text-center text-slate-400">Accounts (Coming Soon)</div>} />
+        <Route path="categories" element={<div className="p-8 text-center text-slate-400">Categories (Coming Soon)</div>} />
         <Route path="settings" element={<Settings />} />
       </Route>
       <Route path="/update-password" element={<ProtectedRoute><UpdatePassword /></ProtectedRoute>} />

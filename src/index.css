@@ -16,7 +16,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   margin: 0;
-  @apply bg-navy-900 text-slate-100;
+  @apply bg-navy-950 text-slate-100;
 }
 
 input,
@@ -32,7 +32,7 @@ button {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  @apply bg-navy-900;
+  @apply bg-navy-950;
 }
 ::-webkit-scrollbar-thumb {
   @apply rounded-full bg-slate-700 hover:bg-neon-cyan/50 transition-colors;
@@ -40,15 +40,15 @@ button {
 
 @layer components {
   .glass-panel {
-    @apply bg-navy-800/60 backdrop-blur-xl border border-white/5 shadow-soft;
+    @apply bg-navy-900/70 backdrop-blur-xl border border-white/5 shadow-soft;
   }
 
   .neon-glow {
-    @apply shadow-[0_0_15px_rgba(0,240,255,0.4)] border-neon-cyan/50;
+    @apply shadow-[0_0_15px_rgba(0,245,255,0.4)] border-neon-cyan/50;
   }
   
   .neon-text {
-    @apply text-neon-cyan drop-shadow-[0_0_8px_rgba(0,240,255,0.8)];
+    @apply text-neon-cyan drop-shadow-[0_0_8px_rgba(0,245,255,0.8)];
   }
 
   .card {

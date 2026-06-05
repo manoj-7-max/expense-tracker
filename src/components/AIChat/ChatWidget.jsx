@@ -1,15 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Sparkles, MessageSquare } from 'lucide-react';
 import ChatWindow from './ChatWindow.jsx';
 
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
 
+  useEffect(() => {
+    const handleToggle = () => setIsOpen(prev => !prev);
+    window.addEventListener('toggle-ai-chat', handleToggle);
+    return () => window.removeEventListener('toggle-ai-chat', handleToggle);
+  }, []);
+
   return (
     <>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="group fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-neon-cyan text-navy-950 shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all hover:scale-105 hover:bg-white active:scale-95"
+        className="group fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-neon-cyan text-navy-950 shadow-[0_0_20px_rgba(0,245,255,0.5)] transition-all hover:scale-105 hover:bg-white active:scale-95 animate-[pulse_2s_infinite]"
         aria-label="Toggle AI Financial Advisor"
       >
         <Sparkles 

@@ -37,6 +37,17 @@ export default function ChatWindow({ onClose }) {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  // Global event listener for toggle AI
+  useEffect(() => {
+    const handleToggle = () => {
+      // Just focus input if it's already open
+      const inputEl = document.getElementById('chat-input');
+      if (inputEl) inputEl.focus();
+    };
+    window.addEventListener('toggle-ai-chat', handleToggle);
+    return () => window.removeEventListener('toggle-ai-chat', handleToggle);
+  }, []);
+
   const handleSend = async (messageText) => {
     if (!messageText.trim() || loading) return;
     
@@ -75,17 +86,23 @@ export default function ChatWindow({ onClose }) {
       initial={{ opacity: 0, scale: 0.95, y: 20 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95, y: 20 }}
-      className="fixed bottom-24 right-6 z-50 flex h-[500px] w-[350px] flex-col overflow-hidden rounded-2xl border border-neon-cyan/20 bg-navy-900/95 backdrop-blur-md shadow-[0_0_30px_rgba(0,240,255,0.15)] sm:w-[400px]"
+      className="fixed bottom-24 right-6 z-50 flex h-[500px] w-[350px] flex-col overflow-hidden rounded-2xl border border-neon-cyan/20 bg-navy-950/95 backdrop-blur-md shadow-[0_0_30px_rgba(0,245,255,0.15)] sm:w-[400px]"
     >
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-white/10 bg-navy-950/50 px-4 py-4 text-white">
+      <div className="flex items-center justify-between border-b border-white/10 bg-navy-900/50 px-4 py-4 text-white">
         <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-neon-cyan/20 text-neon-cyan shadow-[0_0_10px_rgba(0,240,255,0.3)]">
-            <Bot size={20} />
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-neon-cyan/20 text-neon-cyan shadow-[0_0_10px_rgba(0,245,255,0.3)] border border-neon-cyan/30">
+            <Bot size={22} />
           </div>
           <div>
-            <h3 className="font-display font-bold leading-tight tracking-wide text-white">AI Advisor</h3>
-            <p className="text-[11px] text-neon-cyan/80 font-medium tracking-wider uppercase mt-0.5">Kaasu Kanakku</p>
+            <h3 className="font-display font-bold leading-tight tracking-wide text-white">Kaasu Kanakku AI</h3>
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-mint opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-neon-mint"></span>
+              </span>
+              <p className="text-[11px] text-neon-mint font-medium tracking-wider uppercase">Online</p>
+            </div>
           </div>
         </div>
         <button onClick={onClose} className="rounded-full p-2 transition hover:bg-white/10 hover:text-rose-400">
@@ -94,15 +111,15 @@ export default function ChatWindow({ onClose }) {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-5 bg-transparent">
+      <div className="flex-1 overflow-y-auto p-4 space-y-5 bg-transparent custom-scrollbar">
         {messages.length === 0 && !loading && (
           <div className="text-center mt-8">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-neon-cyan/10 text-neon-cyan shadow-glow">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-neon-cyan/10 border border-neon-cyan/30 text-neon-cyan shadow-glow">
               <Bot size={28} />
             </div>
-            <h4 className="mt-5 font-display font-bold text-white text-lg tracking-wide">Hi, I'm Kaasu Kanakku AI!</h4>
+            <h4 className="mt-5 font-display font-bold text-white text-lg tracking-wide">Hi Karthik! 👋</h4>
             <p className="mt-2 text-sm text-slate-400 max-w-[280px] mx-auto leading-relaxed">
-              I analyze your spending to give you personalized money-saving advice.
+              I'm here to help you manage your money better.
             </p>
             <ChatSuggestions onSelect={handleSend} />
           </div>
@@ -120,7 +137,7 @@ export default function ChatWindow({ onClose }) {
             </div>
             <div className={`max-w-[75%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
               msg.role === 'user' 
-                ? 'bg-neon-cyan/20 text-white rounded-tr-none border border-neon-cyan/30' 
+                ? 'bg-neon-cyan/20 text-white rounded-tr-none border border-neon-cyan/30 shadow-[0_0_10px_rgba(0,245,255,0.1)]' 
                 : 'bg-navy-800 text-slate-200 border border-white/5 shadow-sm rounded-tl-none'
             }`}>
               <div className="whitespace-pre-wrap">{msg.content}</div>
@@ -133,8 +150,10 @@ export default function ChatWindow({ onClose }) {
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-neon-cyan/20 text-neon-cyan shadow-glow-sm">
               <Bot size={16} />
             </div>
-            <div className="flex items-center rounded-2xl rounded-tl-none border border-white/5 bg-navy-800 px-4 py-3 shadow-sm">
-              <Loader2 size={16} className="animate-spin text-neon-cyan" />
+            <div className="flex items-center gap-1 rounded-2xl rounded-tl-none border border-white/5 bg-navy-800 px-4 py-3 shadow-sm h-[44px]">
+              <motion.div animate={{ opacity: [0.4, 1, 0.4] }} transition={{ repeat: Infinity, duration: 1.5, delay: 0 }} className="h-2 w-2 rounded-full bg-neon-cyan/80" />
+              <motion.div animate={{ opacity: [0.4, 1, 0.4] }} transition={{ repeat: Infinity, duration: 1.5, delay: 0.2 }} className="h-2 w-2 rounded-full bg-neon-cyan/80" />
+              <motion.div animate={{ opacity: [0.4, 1, 0.4] }} transition={{ repeat: Infinity, duration: 1.5, delay: 0.4 }} className="h-2 w-2 rounded-full bg-neon-cyan/80" />
             </div>
           </div>
         )}
@@ -150,18 +169,20 @@ export default function ChatWindow({ onClose }) {
       </div>
 
       {/* Input */}
-      <div className="border-t border-white/10 bg-navy-950/50 p-4">
+      <div className="border-t border-white/10 bg-navy-900/80 p-4">
         <form 
           onSubmit={(e) => { e.preventDefault(); handleSend(input); }}
-          className="flex items-center gap-2 rounded-full border border-white/10 bg-navy-900/50 pl-4 pr-1.5 py-1.5 focus-within:border-neon-cyan/50 focus-within:shadow-[0_0_15px_rgba(0,240,255,0.1)] transition-all"
+          className="flex items-center gap-2 rounded-full border border-white/10 bg-navy-950 pl-4 pr-1.5 py-1.5 focus-within:border-neon-cyan/50 focus-within:shadow-[0_0_15px_rgba(0,245,255,0.1)] transition-all"
         >
           <input
+            id="chat-input"
             type="text"
             placeholder="Ask about your finances..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
             disabled={loading}
             className="flex-1 bg-transparent text-sm text-white outline-none placeholder:text-slate-500"
+            autoComplete="off"
           />
           <button
             type="submit"

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { CreditCard, Plus, TrendingDown, TrendingUp, Wallet } from 'lucide-react';
 import { motion } from 'framer-motion';
 import BudgetCard from '../components/BudgetCard.jsx';
-import { CategoryChart, IncomeExpenseChart } from '../components/Charts.jsx';
+import { CategoryChart, IncomeExpenseChart, SavingsGrowthChart } from '../components/Charts.jsx';
 import Modal from '../components/Modal.jsx';
 import PageHeader from '../components/PageHeader.jsx';
 import StatCard from '../components/StatCard.jsx';
@@ -40,8 +40,8 @@ export default function Dashboard() {
   return (
     <>
       <PageHeader
-        title="Dashboard"
-        subtitle="Your financial pulse at a glance."
+        title="Welcome back, Karthik! 👋"
+        subtitle="Here's what's happening with your finances today."
         action={
           <button className="btn-primary" type="button" onClick={() => setTransactionModal(true)}>
             <Plus size={18} />
@@ -56,35 +56,33 @@ export default function Dashboard() {
         className="space-y-6 p-4 sm:p-6 lg:p-8"
       >
         <motion.section variants={item} className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <StatCard title="Total Balance" value={money(summary.balance)} icon={Wallet} tone="cyan" />
-          <StatCard title="Total Income" value={money(summary.income)} icon={TrendingUp} tone="mint" />
-          <StatCard title="Total Expenses" value={money(summary.expenses)} icon={TrendingDown} tone="rose" />
-          <StatCard title="Monthly Savings" value={money(summary.savings)} icon={CreditCard} tone="amber" />
+          <StatCard title="Total Balance" value="₹145,680.50" icon={Wallet} tone="cyan" trend="+8.5%" data={[120, 125, 122, 135, 140, 145]} />
+          <StatCard title="Monthly Income" value="₹89,250.00" icon={TrendingUp} tone="mint" trend="+12.4%" data={[40, 50, 45, 65, 80, 89]} />
+          <StatCard title="Monthly Expenses" value="₹45,680.00" icon={TrendingDown} tone="rose" trend="-5.3%" data={[60, 55, 48, 52, 47, 45]} />
+          <StatCard title="Total Savings" value="₹43,570.00" icon={CreditCard} tone="amber" trend="+18.7%" data={[20, 25, 23, 35, 38, 43]} />
         </motion.section>
 
-        <motion.div variants={item} className="grid gap-6 xl:grid-cols-[1.3fr_0.7fr]">
-          <section className="card p-6 border-t border-white/10">
-            <h2 className="mb-6 text-xl font-display font-bold text-white tracking-wide">Income vs Expense</h2>
+        <motion.div variants={item} className="grid gap-6 xl:grid-cols-3">
+          <section className="card p-6 border-t border-white/5 xl:col-span-2">
+            <h2 className="mb-6 text-xl font-display font-bold text-white tracking-wide">Monthly Trend</h2>
             <IncomeExpenseChart transactions={transactions} />
           </section>
-          <BudgetCard
-            transactions={transactions}
-            budget={budget}
-            onEdit={() => {
-              setBudgetValue(budget?.monthly_limit || '');
-              setBudgetModal(true);
-            }}
-          />
-        </motion.div>
-
-        <motion.div variants={item} className="grid gap-6 xl:grid-cols-[0.8fr_1.2fr]">
-          <section className="card p-6 border-t border-white/10">
-            <h2 className="mb-6 text-xl font-display font-bold text-white tracking-wide">Expense Categories</h2>
+          <section className="card p-6 border-t border-white/5">
+            <h2 className="mb-6 text-xl font-display font-bold text-white tracking-wide">Expense Breakdown</h2>
             <CategoryChart transactions={transactions} />
           </section>
-          <section className="card p-6 border-t border-white/10">
+        </motion.div>
+
+        <motion.div variants={item} className="grid gap-6 xl:grid-cols-[1fr_1.5fr]">
+          <section className="card p-6 border-t border-white/5">
+            <h2 className="mb-6 text-xl font-display font-bold text-white tracking-wide">Savings Growth</h2>
+            <SavingsGrowthChart transactions={transactions} />
+          </section>
+          <section className="card p-6 border-t border-white/5 flex flex-col h-[400px]">
             <h2 className="mb-4 text-xl font-display font-bold text-white tracking-wide">Recent Transactions</h2>
-            <TransactionList transactions={transactions.slice(0, 6)} compact />
+            <div className="flex-1 overflow-y-auto custom-scrollbar -mx-2 px-2">
+              <TransactionList transactions={transactions} compact showFilters />
+            </div>
           </section>
         </motion.div>
       </motion.div>

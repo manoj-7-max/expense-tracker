@@ -10,12 +10,13 @@ export default {
       },
       colors: {
         navy: {
-          900: '#060B14',
-          800: '#0A1220',
-          700: '#111C30',
+          950: '#050B14', // Deep black background
+          900: '#0B1220', // Dark navy cards
+          800: '#151C2C', // Slightly lighter for hover
+          700: '#1F2937',
         },
         neon: {
-          cyan: '#00F0FF',
+          cyan: '#00F5FF', // Neon cyan
           mint: '#00FFCC',
           blue: '#0070F3',
           purple: '#8A2BE2',
@@ -24,9 +25,9 @@ export default {
         }
       },
       boxShadow: {
-        soft: '0 12px 40px rgba(0, 240, 255, 0.05)',
-        glow: '0 0 15px rgba(0, 240, 255, 0.4)',
-        'glow-sm': '0 0 5px rgba(0, 240, 255, 0.3)',
+        soft: '0 12px 40px rgba(0, 245, 255, 0.05)',
+        glow: '0 0 15px rgba(0, 245, 255, 0.4)',
+        'glow-sm': '0 0 5px rgba(0, 245, 255, 0.3)',
       },
     },
   },

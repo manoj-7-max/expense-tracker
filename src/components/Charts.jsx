@@ -3,11 +3,11 @@ import { categorySeries, monthlySeries } from '../lib/finance.js';
 
 const tooltipStyle = {
   borderRadius: 12,
-  border: '1px solid rgba(0, 240, 255, 0.2)',
-  backgroundColor: '#0A1220',
+  border: '1px solid rgba(0, 245, 255, 0.2)',
+  backgroundColor: '#0B1220',
   color: '#f8fafc',
   fontSize: 13,
-  boxShadow: '0 0 15px rgba(0, 240, 255, 0.15)',
+  boxShadow: '0 0 15px rgba(0, 245, 255, 0.15)',
 };
 
 export function IncomeExpenseChart({ transactions }) {
@@ -56,8 +56,11 @@ export function CategoryChart({ transactions }) {
   );
 }
 
-export function MonthlyExpenseChart({ transactions }) {
-  const data = monthlySeries(transactions);
+export function SavingsGrowthChart({ transactions }) {
+  const data = monthlySeries(transactions).map(item => ({
+    month: item.month,
+    savings: item.income - item.expense
+  }));
 
   return (
     <ResponsiveContainer width="100%" height={260}>
@@ -66,7 +69,7 @@ export function MonthlyExpenseChart({ transactions }) {
         <XAxis dataKey="month" tick={{ fill: '#94a3b8', fontSize: 12 }} stroke="rgba(255,255,255,0.1)" />
         <YAxis tick={{ fill: '#94a3b8', fontSize: 12 }} stroke="rgba(255,255,255,0.1)" />
         <Tooltip contentStyle={tooltipStyle} cursor={{ fill: 'rgba(255,255,255,0.02)' }} />
-        <Bar dataKey="expense" fill="#FF3366" radius={[4, 4, 0, 0]} />
+        <Bar dataKey="savings" fill="#00F5FF" radius={[4, 4, 0, 0]} style={{ filter: `drop-shadow(0px 0px 8px rgba(0,245,255,0.4))` }} />
       </BarChart>
     </ResponsiveContainer>
   );
