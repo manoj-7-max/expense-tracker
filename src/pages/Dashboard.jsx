@@ -56,10 +56,10 @@ export default function Dashboard() {
         className="space-y-6 p-4 sm:p-6 lg:p-8"
       >
         <motion.section variants={item} className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <StatCard title="Total Balance" value="₹145,680.50" icon={Wallet} tone="cyan" trend="+8.5%" data={[120, 125, 122, 135, 140, 145]} />
-          <StatCard title="Monthly Income" value="₹89,250.00" icon={TrendingUp} tone="mint" trend="+12.4%" data={[40, 50, 45, 65, 80, 89]} />
-          <StatCard title="Monthly Expenses" value="₹45,680.00" icon={TrendingDown} tone="rose" trend="-5.3%" data={[60, 55, 48, 52, 47, 45]} />
-          <StatCard title="Total Savings" value="₹43,570.00" icon={CreditCard} tone="amber" trend="+18.7%" data={[20, 25, 23, 35, 38, 43]} />
+          <StatCard title="Total Balance" value={money(summary.balance)} icon={Wallet} tone="cyan" trend="+8.5%" data={[120, 125, 122, 135, 140, 145]} />
+          <StatCard title="Total Income" value={money(summary.income)} icon={TrendingUp} tone="mint" trend="+12.4%" data={[40, 50, 45, 65, 80, 89]} />
+          <StatCard title="Monthly Expenses" value={money(summary.monthlySpent)} icon={TrendingDown} tone="rose" trend="-5.3%" data={[60, 55, 48, 52, 47, 45]} />
+          <StatCard title="Total Savings" value={money(summary.savings)} icon={CreditCard} tone="amber" trend="+18.7%" data={[20, 25, 23, 35, 38, 43]} />
         </motion.section>
 
         <motion.div variants={item} className="grid gap-6 xl:grid-cols-3">
